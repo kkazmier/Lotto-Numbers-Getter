@@ -39,13 +39,13 @@ public class LottoClient {
         Result result = new Result();
         int gamePosition = calculateGamePosition(gameType);
         int numbersQuantity = calculateGameNumbersQuantity(gameType);
-        URI url = buildUrl(gameType);
-        //URI url = URI.create("https://www.lotto.pl/api/lotteries/draw-results/by-gametype?game=Lotto&index=1&size=1&sort=drawDate&order=DESC");
+        //URI url = buildUrl(gameType);
+        URI url = URI.create("https://www.lotto.pl/api/lotteries/draw-results/by-gametype?game=Lotto&index=1&size=1&sort=drawDate&order=DESC");
         ResponseEntity<?> response = restTemplate.getForEntity(url, String.class);
         logger.info(response.getStatusCode().toString());
         if (response.getBody().toString() != null) {
             JsonNode resultNode = new ObjectMapper().readTree(response.getBody().toString());
-
+            logger.info("resultNode: " + resultNode);
 
             result.setDrawDate(LocalDateTime.parse(resultNode.get("items").get(0).get("results").get(gamePosition).get("drawDate").asText().substring(0, 19)));
             result.setDrawSystemId(resultNode.get("items").get(0).get("results").get(gamePosition).get("drawSystemId").asInt());
@@ -62,13 +62,15 @@ public class LottoClient {
     }
 
     public URI buildUrl(String gameType){
-        return UriComponentsBuilder.fromHttpUrl(endpoint)
+        URI url = UriComponentsBuilder.fromHttpUrl(endpoint)
                 .queryParam("game", gameType)
                 .queryParam("index", 1)
                 .queryParam("size", 1)
                 .queryParam("sort", "drawDate")
                 .queryParam("order", "DESC")
                 .build().encode().toUri();
+        logger.info(url.toString());
+        return url;
     }
 
     public int calculateGamePosition(String gameType){
