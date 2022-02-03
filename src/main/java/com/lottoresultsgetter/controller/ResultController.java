@@ -27,8 +27,15 @@ public class ResultController {
         logger.info("getLastResult");
         Result result = lottoClient.getLastResult(gameType);
         logger.info(result.toString());
+        model.addAttribute("Lotto", new Result());
+        model.addAttribute("MiniLotto", new Result());
+        model.addAttribute("MultiMulti", new Result());
+        model.addAttribute("Kaskada", new Result());
+        model.addAttribute("Eurojackpot", new Result());
         model.addAttribute(gameType, result);
-        return "redirect:/home";
+
+        //model.addAttribute("text", "text");
+        return "home";
     }
 
 
