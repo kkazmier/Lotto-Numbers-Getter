@@ -18,7 +18,7 @@ public class Result {
     private LocalDateTime drawDate;
     private Integer drawSystemId;
     private String gameType;
-    private List<Integer> numbers = new ArrayList<>();
+    private List<Integer> numbers;
 
     public Result() {
         drawDate = LocalDateTime.now();
